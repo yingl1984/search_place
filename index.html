@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ask for fun</title>
+    <link rel="shortcut icon" href="#">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Ask for fun</h1>
+
+        <form id="js-form">
+            <label for="js-search-item">Please input the item you're interested in: </label>
+            <input type="text" name="search-item" id="js-search-item" style="width: 250px;" value="restaurant,carnival,zoo..." required>
+            
+            <label for="js-address">Address: </label>
+            <input type="text" name="address" id="js-address" style="width: 250px;" value="Current Location" required>
+            
+            <input type="submit" value="Go!">
+            <span>within</span>
+
+            <label for="js-radius">Circle radius: </label>
+            <input type="text" name="radius" id="js-radius" class="underline" style="width: 50px;" value="300" required>
+
+            <span>meters</span>
+
+        </form>
+
+        <p id="js-error-message" class="error-message"></p>
+        <section id="results" class="hidden">
+          <h2></h2>
+          <p id="no-result" class="hidden"></p>
+          <ul id="results-list">
+          </ul>
+        </section>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script src="index.js"></script>
+</body>
+</html>
