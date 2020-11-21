@@ -51,8 +51,8 @@ let geoLocation=[0,0];
 function displayCurrentPosition(position){
   geoLocation[0]=position.coords.latitude;
   geoLocation[1]=position.coords.longitude;
-  // console.log(geoLocation);
-  // alert("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
+  console.log(geoLocation);
+  alert("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
 }
 function setGeoLocation(responseJson){
   geoLocation[0]=responseJson.resourceSets[0].resources[0].point.coordinates[0];
@@ -60,23 +60,38 @@ function setGeoLocation(responseJson){
   console.log(`${geoLocation[0]} & geoLocation[1]`);
   debugger;
 }
+// Script from MS website to get Jsonp object
+function CallRestService(request) {
+  var script = document.createElement("script");
+  script.setAttribute("type", "text/javascript");
+  script.setAttribute("src", request);
+  document.body.appendChild(script);
+}
+
+function GeocodeCallback(result) 
+{   
+    console.log(result);
+}
 
 function getPositionByAddress(address){
-  const queryString = `locality=${address}&maxResults=5&key=${apiKey}`;
-  // const url=find_location_baseURL + '?' + queryString;
-  const url="http://dev.virtualearth.net/REST/v1/Locations/US/WA/98052/Redmond/1%20Microsoft%20Way?o=json&key=AkykgVoBSrnMyZ1kwuQnifxHZK_buU9Ammgz9gccKxA5aon4rGccs9u1sOeG5BJE";
-  console.log(url);
-  fetch(url)
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error(response.statusText);
-    })
-    .then(responseJson => setGeoLocation(responseJson))
-    .catch(err => {
-      $('#js-error-message').text(`Something went wrong: ${err.message}`);
-    });
+  const queryString = `locality=${encodeURIComponent(address)}&maxResults=5&jsonp=GeocodeCallback&key=${apiKey}`;
+  const geocodeRequest=find_location_baseURL + '?' + queryString;
+  
+  console.log(geocodeRequest);
+  CallRestService(geocodeRequest);
+
+  debugger;
+  // fetch(url)
+  //   .then(response => {
+  //     if (response.ok) {
+  //       return response.json();
+  //     }
+  //     throw new Error(response.statusText);
+  //   })
+  //   .then(responseJson => setGeoLocation(responseJson))
+  //   .catch(err => {
+  //     $('#js-error-message').text(`Something went wrong: ${err.message}`);
+  //   });
 }
 
 function generateGeolocation(address){
