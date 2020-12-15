@@ -1,11 +1,16 @@
-* {
-    box-sizing: border-box;
-  }
-  
-  body {
+ html, body {
     font-family: 'Roboto', sans-serif;
+    width: 1005;
+    height: 100%;
   }
   
+  .mainContainer 
+  {
+    display: grid;
+    grid-template-rows: 20% 80%;
+    width: 100%;
+    height: 100%;
+  }
   button, input[type="text"] {
     padding: 5px;
   }
@@ -26,18 +31,13 @@
   }
   
   .container {
-    max-width: 1000px;
     margin: auto;
   }
-  
+
   .error-message {
       color: red;
   }
   
-  .hidden {
-    display: none;
-  }
-
   .red{
     color:red;
   }

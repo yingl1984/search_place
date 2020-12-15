@@ -1,147 +1,150 @@
 'use strict';
 
-const apiKey = 'AkykgVoBSrnMyZ1kwuQnifxHZK_buU9Ammgz9gccKxA5aon4rGccs9u1sOeG5BJE'; 
-const find_location_baseURL='http://dev.virtualearth.net/REST/v1/Locations';
-const local_search_baseURL = 'https://dev.virtualearth.net/REST/v1/LocalSearch/';
-const get_static_map_baseURL='https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/';
-let geoLocation=[0,0];
+const apiKey = 'AIzaSyBQK_is9a2Ns0LK8pvfpbqHmM0qESAZ7qY'; 
 
-// function formatQueryParams(params) {
-//   const queryItems = Object.keys(params)
-//     .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
-//   return queryItems.join('&');
-// }
 
-// function generateAddress(addressArray){
-//   console.log(addressArray);
-//   let result = "";
-//   for(let i = 0; i < addressArray.length; i++){
-//     let curStr=Object.keys(addressArray[i]).filter(key => addressArray[i][key] != "")
-//     .map(key => `${key}=${addressArray[i][key]}`);
+let map;
+let service;
+let infowindow;
 
-//     result += `<strong>The ${i + 1} address is: </strong>${curStr.map(item=>`<p>${item},</p>`).join("")}`
-//   }
-//   return result;
-// }
+// Get the geolocation of the current location
+function generateGeolocation(query,radius){
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        sendFindNearByRequest(position.coords.latitude, position.coords.longitude, query,radius)
+      });
+    } else { 
+      $('#js-error-message').text("Geolocation is not supported by this browser.");
+    }  
+}
 
-// function displayResults(responseJson) {
-//   console.log(responseJson);
+function sendFindNearByRequest(lat, lng, query,radius){
+  const curLocation = new google.maps.LatLng(-33.8665433,151.1956316);
+  
+
+  
+  console.log(`lat:${lat},lng:${lng},query:${query},radius:${radius}`);
+  const request = {
+    location: curLocation,
+    radius: radius,
+    keyword: query
+  };
+  service = new google.maps.places.PlacesService(map);
+  service.nearbySearch(request, sendGetDetailRequest);
+ 
+}
+
+function sendGetDetailRequest(results, status){
+  console.log(results[0]);
+  // Put placeID into an array
+  const placeId=[];
+  if (status === google.maps.places.PlacesServiceStatus.OK){
+    for(let i = 0; i < results.length; i++){
+      placeId.push(results[i].place_id);
+    }
+  }
+  console.log(placeId);
+  // Send Place Details request
+  /*const map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: -33.866, lng: 151.196 },
+    zoom: 15,
+  });*/
+  const request = {
+    placeId: placeId[0],
+    fields: ["name", "formatted_address", "place_id", "geometry"],
+  };
+  //const infowindow = new google.maps.InfoWindow();
+  //const service = new google.maps.places.PlacesService(map);
+  service.getDetails(request, (place, status) => {
+    
+    if (status === google.maps.places.PlacesServiceStatus.OK) {
+      const marker = new google.maps.Marker({
+        map,
+        position: place.geometry.location,
+      });
+      google.maps.event.addListener(marker, "click", function () {
+        infowindow.setContent(
+          "<div><strong>" +
+            place.name +
+            "</strong><br>" +
+            "Place ID: " +
+            place.place_id +
+            "<br>" +
+            place.formatted_address +
+            "</div>"
+        );
+        infowindow.open(map, this);
+      });
+    }
+  });
+$('#map').show();
+}
+*/
+
+// function displayResults(results, status) {
+//   console.log(results[0]);
+//   console.log(results[0].name);
 //   $('#results-list').empty();
 //   $('#no-result').empty();
-//   if(responseJson.data.length === 0){
+
+//   if(results.length === 0){
 //     $('#no-result').text("Sorry, there is no corresponding result.");
 //     $('#no-result').addClass('red');
 //     $('#no-result').removeClass('hidden');
 //   }else{
-//     for (let i = 0; i < responseJson.data.length; i++){
-//       const address=generateAddress(responseJson.data[i].addresses);
+//     for (let i = 0; i < results.length; i++){
+      
 //       $('#results-list').append(
-//         `<li><h3>${responseJson.data[i].fullName}</h3>
-//         <p><a href=${responseJson.data[i].url} target=_black>Click here to explore</a></p>
-//         <p><em>Description: </em></p><p>${responseJson.data[i].description}</p> 
-//         <div>
-//           <h4>Address: </h4>
-//           <p>${address}</p> 
-//         </div>
-//         </li>`
+//         `<li><h3>${results[i].name}</h3></li>`
 //       )};
 //   }
 //   $('#results').removeClass('hidden');
-// };
-function displayCurrentPosition(position){
-  geoLocation[0]=position.coords.latitude;
-  geoLocation[1]=position.coords.longitude;
-  console.log(geoLocation);
-  alert("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
-}
-function setGeoLocation(responseJson){
-  geoLocation[0]=responseJson.resourceSets[0].resources[0].point.coordinates[0];
-  geoLocation[1]=responseJson.resourceSets[0].resources[0].point.coordinates[1];
-  console.log(`${geoLocation[0]} & geoLocation[1]`);
-  debugger;
-}
-// Script from MS website to get Jsonp object
-function CallRestService(request) {
-  var script = document.createElement("script");
-  script.setAttribute("type", "text/javascript");
-  script.setAttribute("src", request);
-  document.body.appendChild(script);
-}
+// }
 
-function GeocodeCallback(result) 
-{   
-    console.log(result);
-}
 
-function getPositionByAddress(address){
-  const queryString = `locality=${encodeURIComponent(address)}&maxResults=5&jsonp=GeocodeCallback&key=${apiKey}`;
-  const geocodeRequest=find_location_baseURL + '?' + queryString;
+function initMap() {
+  const sydney = new google.maps.LatLng(-33.867, 151.195);
+  infowindow = new google.maps.InfoWindow();
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: sydney,
+    zoom: 15,
+  });
   
-  console.log(geocodeRequest);
-  CallRestService(geocodeRequest);
-
-  debugger;
-  // fetch(url)
-  //   .then(response => {
-  //     if (response.ok) {
-  //       return response.json();
-  //     }
-  //     throw new Error(response.statusText);
-  //   })
-  //   .then(responseJson => setGeoLocation(responseJson))
-  //   .catch(err => {
-  //     $('#js-error-message').text(`Something went wrong: ${err.message}`);
-  //   });
-}
-
-function generateGeolocation(address){
-  debugger;
-  if(address==="Current Location"){
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(displayCurrentPosition);
-    } else { 
-      $('#js-error-message').text("Geolocation is not supported by this browser.");
-    }
-  }else{
-    getPositionByAddress(address);
-  }
-}
-
-function getResultsList(query, address, radius) {
-  generateGeolocation(address);
-  console.log(geoLocation[0]);
-  debugger;
-  const params = {
-    limit: maxResults,
-    q: query,
-    api_key: apiKey
+  const request = {
+    query: "Museum of Contemporary Art Australia",
+    fields: ["name", "geometry"],
   };
-  const queryString = formatQueryParams(params)
-  const url = searchURL + '?' + queryString;
-
-  console.log(url);
-  fetch(url)
-    .then(response => {
-      if (response.ok) {
-        return response.json();
+  
+  service = new google.maps.places.PlacesService(map);
+  
+ service.findPlaceFromQuery(request, (results, status) => {
+    if (status === google.maps.places.PlacesServiceStatus.OK) {
+      for (let i = 0; i < results.length; i++) {
+        createMarker(results[i]);
       }
-      throw new Error(response.statusText);
-    })
-    .then(responseJson => displayResults(responseJson))
-    .catch(err => {
-      $('#js-error-message').text(`Something went wrong: ${err.message}`);
-    });
+      map.setCenter(results[0].geometry.location);
+    }
+  });
+}
 
+function createMarker(place) {
+  const marker = new google.maps.Marker({
+    map,
+    position: place.geometry.location,
+  });
+  google.maps.event.addListener(marker, "click", () => {
+    infowindow.setContent(place.name);
+    infowindow.open(map);
+  });
 }
 
 function watchForm() {
+  initMap();
   $('form').submit(event => {
     event.preventDefault();
     const searchItem = $('#js-search-item').val();
-    const address = $('#js-address').val();
-    const radius = $('#js-radius').val();
-
-    getResultsList(searchItem, address, radius);
+    const radius =$('#js-radius').val();
+    generateGeolocation(searchItem,radius);
   });
 }
 
