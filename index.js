@@ -6,6 +6,7 @@ let map;
 let service;
 let infowindow;
 
+//Get the geolocation information by sending HTTP GET request to the Google API endpoint: https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode
 function generateGeolocation(query){
   fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=${apiKey}`)
   .then(response => response.json())
@@ -16,11 +17,12 @@ function generateGeolocation(query){
       response.results[0].formatted_address)
   })
   .catch(err => {
+    $('#js-error-message').removeClass('hidden');
     $('#js-error-message').text(`Something went wrong: ${err.message}`);
   });
 }
 
-//Show the place in the map
+//Mark the place in the map and show the detail information in the infowindow after clicking the marker
 function setUpMap(lat, lng, placeId, formattedAdd)
 {
   const latLng = new google.maps.LatLng(lat, lng);
@@ -58,6 +60,7 @@ function setUpMap(lat, lng, placeId, formattedAdd)
 function watchForm() {
   $("form").submit((e)=>{
     e.preventDefault();
+    $('#js-error-message').addClass('hidden');
     const searchItem = $('#js-search-item').val();
     generateGeolocation(searchItem);
   })
