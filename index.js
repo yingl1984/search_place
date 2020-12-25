@@ -20,7 +20,7 @@ function generateGeolocation(query){
   });
 }
 
-
+//Show the place in the map
 function setUpMap(lat, lng, placeId, formattedAdd)
 {
   const latLng = new google.maps.LatLng(lat, lng);
