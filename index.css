@@ -49,6 +49,7 @@
     background-size:contain;
     text-align: center;
   }
+
   /* Style the input text */
   input[type="text"] {
     font-size: 15px;
@@ -71,6 +72,7 @@
     position: absolute;
     width: 1px;
   }
+
   /* Add search icon in the input text */
   #js-search-item{
     background-image: url("/images/loupe.png");
@@ -80,6 +82,7 @@
     background-size: 15px;
     background-repeat: no-repeat;
   }
+  
   /* Style the button */
   input[type='submit']{
     width: 4.5em;
