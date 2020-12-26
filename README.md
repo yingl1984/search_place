@@ -5,7 +5,7 @@ Users input an address, click the "Go" button, then the place will be marked in 
 [Ask For Fun](https://yingl1984.github.io/search_place/)
 
 ## Screenshots
-![screenshot](screenshot.png)
+**![screenshot](screenshot.png)**
 
 ## Built With
 - Google API
