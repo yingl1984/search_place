@@ -5,4 +5,4 @@ Users input an address, click "Go" button, then the place will be marked in the 
 [Ask For Fun](https://yingl1984.github.io/search_place/)
 
 ## Screenshots
-![screenshot](images\AskForFun_screenshot)
+![screenshot](screenshot.png)
