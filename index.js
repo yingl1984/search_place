@@ -17,6 +17,7 @@ function generateGeolocation(query){
       response.results[0].formatted_address)
   })
   .catch(err => {
+    $('#map').addClass('hidden');
     $('#js-error-message').removeClass('hidden');
     $('#js-error-message').text(`Something went wrong: ${err.message}`);
   });
@@ -60,6 +61,7 @@ function setUpMap(lat, lng, placeId, formattedAdd)
 function watchForm() {
   $("form").submit((e)=>{
     e.preventDefault();
+    $('#map').removeClass('hidden');
     $('#js-error-message').addClass('hidden');
     const searchItem = $('#js-search-item').val();
     generateGeolocation(searchItem);
