@@ -55,8 +55,8 @@
     font-size: 15px;
     border-color: black;
     background-color:#f1faee;
-     box-shadow: none;
-     color:black;
+    box-shadow: none;
+    color:black;
     padding-left: 45px;
     height: 35px;
     width: 440px;
@@ -82,7 +82,7 @@
     background-size: 15px;
     background-repeat: no-repeat;
   }
-  
+
   /* Style the button */
   input[type='submit']{
     width: 4.5em;
