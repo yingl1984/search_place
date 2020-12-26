@@ -7,9 +7,11 @@ Users input an address, click the "Go" button, then the place will be marked in 
 ## Screenshots
 ![screenshot](screenshot.png)
 
-## 2 APIs
-1. Google Map API endpoint: https://maps.googleapis.com/maps/api
-2. Google Geocode API endpoint: https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode
+## 2 APIs used in this app
+1. Google Map API endpoint: 
+https://maps.googleapis.com/maps/api
+2. Google Geocode API endpoint: 
+https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode
 
 ## Built With
 - Google API
