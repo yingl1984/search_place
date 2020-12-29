@@ -11,12 +11,19 @@ function placeDetails(query)
   fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${query}&inputtype=textquery&fields=place_id,formatted_address,name,rating,opening_hours,geometry&key=${apiKey}`)
   .then(response=>response.json())
   .then(response => {
-    const isOpened = response.candidates[0].opening_hours.open_now == false ? "No" : "Yes";
+    let isOpened = 'N/A';
+    if(response.candidates[0].opening_hours){
+      isOpened = response.candidates[0].opening_hours.open_now == false ? "No" : "Yes";
+    }
+    let rating = 'N/A';
+    if(response.candidates[0].rating){
+      rating = response.candidates[0].rating;
+    }
     const contentString =
   "<div>" +
   "<p><strong>Place name</strong>: "+response.candidates[0].name+
   "<br><strong>Address</strong>: "+response.candidates[0].formatted_address+
-  "<br><strong>Rating</strong>: "+response.candidates[0].rating+
+  "<br><strong>Rating</strong>: "+rating+
   "<br><strong>Opened</strong>: "+isOpened+
   "</p></div>";
 
