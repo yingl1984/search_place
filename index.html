@@ -9,23 +9,33 @@
 </head>
 <body>
     <div class="mainContainer">
-        <div class="wrapper">
+        
             <div class="container group">
                 <div class="item">
                     <h1 class="slide-left">Ask For Fun</h1>
+                    <h2>Please input an address, pinpoint the place on the map.</h2>
+                    <h2>Or search any place of interest.</h2>
                 </div>
-                <div class="item">
+                <section class="item">
                     <form id="js-form">
-                        <label for="js-search-item">Please input the address: </label>
-                        <input type="text" name="search-item" id="js-search-item" placeholder="Please input an address..."required>                   
-                        <input type="submit" value="Go!">
+                        <label for="js-search-item">Pinpoint the location on the map</label>
+                        <input type="text" name="search-item" id="js-search-item" placeholder="Please input an address"required>                   
+                        <input type="submit" value="Pinpoint">
                     </form>
-                </div>
-                <div class="item">
+                </section>
+               
+                <section class="item">
+                    <form id="place-form">
+                        <label for="place-item">Look up a place of interest</label>
+                        <input type="text" name="place-item" id="place-item" placeholder="Museum in New York"required>
+                        <input type="submit" value="Search">
+                    </form>
+                </section>
+
+                <section class="item">
                     <p id="js-error-message" class="error-message hidden"></p>
-                </div>
+                </section>
             </div>
-        </div>
     
         <div id="map"></div>
     </div>
