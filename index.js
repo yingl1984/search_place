@@ -1,14 +1,30 @@
 'use strict';
 
 const apiKey = 'AIzaSyBQK_is9a2Ns0LK8pvfpbqHmM0qESAZ7qY'; 
+const apiBaseURL_placeDetail='https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json';
+const apiBaseURL_geoCode='https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode/json';
 
 let map;
 let service;
 let infowindow;
 
+function formatQueryParams(params){
+  const queryItems=Object.keys(params).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+  return queryItems.join('&');
+}
+
+//Google Place Details API
 function placeDetails(query)
 {
-  fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${query}&inputtype=textquery&fields=place_id,formatted_address,name,rating,opening_hours,geometry&key=${apiKey}`)
+  const params={
+    input: query,
+    inputtype: 'textquery',
+    fields: 'place_id,formatted_address,name,rating,opening_hours,geometry',
+    key:apiKey
+  }
+  const queryString=formatQueryParams(params);
+  const url=apiBaseURL_placeDetail+'?'+queryString;
+  fetch(url)
   .then(response=>response.json())
   .then(response => {
     let isOpened = 'N/A';
@@ -39,8 +55,15 @@ function placeDetails(query)
   });
 }
 
+//Google geoCode API
 function generateGeolocation(query){
-  fetch(`https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=${apiKey}`)
+  const params={
+    address: query,
+    key: apiKey
+  }
+  const queryString=formatQueryParams(params);
+  const url= apiBaseURL_geoCode+'?'+queryString;
+  fetch(url)
   .then(response => response.json())
   .then(response => {
     const contentString =
@@ -59,7 +82,7 @@ function generateGeolocation(query){
   });
 }
 
-//Map
+////Google Map API
 function setUpMap(lat, lng, contentString)
 {
   const latLng = new google.maps.LatLng(lat, lng);
